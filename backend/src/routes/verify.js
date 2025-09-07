@@ -1,8 +1,10 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { v4 as uuidv4 } from 'uuid';
-import { redis } from '../redisClient.js';
 import { query } from '../db.js';
+
+// Simple in-memory OTT storage (use Redis in production)
+const ottStore = new Map();
 
 const router = express.Router();
 
@@ -36,12 +38,15 @@ router.get('/ott', ottLimiter, async (req, res) => {
     const ott = uuidv4();
     const ottKey = `ott:${pid}:${ott}`;
     
-    // Store in Redis with 30s TTL
-    await redis.setex(ottKey, 30, JSON.stringify({
+    // Store in memory with 30s TTL
+    ottStore.set(ottKey, {
       pid,
       generatedAt: Date.now(),
       ip: req.ip
-    }));
+    });
+    
+    // Auto-cleanup after 30 seconds
+    setTimeout(() => ottStore.delete(ottKey), 30000);
 
     res.json({ ott });
   } catch (error) {
@@ -61,7 +66,7 @@ router.post('/verify', async (req, res) => {
     const ottKey = `ott:${pid}:${ott}`;
     
     // Check and consume OTT (single use)
-    const ottData = await redis.get(ottKey);
+    const ottData = ottStore.get(ottKey);
     if (!ottData) {
       return res.status(400).json({ 
         result: 'suspect',
@@ -70,7 +75,7 @@ router.post('/verify', async (req, res) => {
     }
 
     // Delete OTT (single use)
-    await redis.del(ottKey);
+    ottStore.delete(ottKey);
 
     // Get product and batch info
     const productResult = await query(`

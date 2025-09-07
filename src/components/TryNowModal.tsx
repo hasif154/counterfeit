@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, QrCode, Lock } from 'lucide-react';
+import { X, Package, Search } from 'lucide-react';
 interface TryNowModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSelectRole: (role: 'manufacturer' | 'buyer') => void;
 }
 export function TryNowModal({
   isOpen,
-  onClose
+  onClose,
+  onSelectRole
 }: TryNowModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -65,7 +67,7 @@ export function TryNowModal({
             {/* Modal Header with close button */}
             <div className="flex justify-between items-center p-6 border-b border-gray-700">
               <h3 className="text-xl font-semibold text-white">
-                Get Started with BlockAuthentic
+                Choose Your Role
               </h3>
               <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
                 <X size={24} />
@@ -73,56 +75,38 @@ export function TryNowModal({
             </div>
             {/* Modal Body */}
             <div className="p-6">
-              <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-blue-900/30 flex items-center justify-center border border-blue-500/30">
-                  <QrCode size={32} className="text-blue-400" />
-                </div>
-              </div>
-              <p className="text-gray-300 text-center mb-6">
-                Fill out the form below to start your journey with
-                BlockAuthentic and secure your products with our cutting-edge
-                verification technology.
+              <p className="text-gray-300 text-center mb-8">
+                Select your role to get started with BlockAuthentic
               </p>
-              <form className="space-y-4">
-                <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-gray-400 mb-1">
-                    Company Name
-                  </label>
-                  <input type="text" id="company" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Your company name" />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-1">
-                    Email Address
-                  </label>
-                  <input type="email" id="email" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="you@example.com" />
-                </div>
-                <div>
-                  <label htmlFor="industry" className="block text-sm font-medium text-gray-400 mb-1">
-                    Industry
-                  </label>
-                  <select id="industry" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="" disabled selected>
-                      Select your industry
-                    </option>
-                    <option value="luxury">Luxury Goods</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="pharma">Pharmaceuticals</option>
-                    <option value="documents">Documents</option>
-                    <option value="fashion">Fashion</option>
-                    <option value="automotive">Automotive</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </form>
-            </div>
-            {/* Modal Footer */}
-            <div className="bg-gray-800/50 p-6 flex flex-col gap-4">
-              <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium py-2 rounded-lg hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
-                Request Demo
-              </button>
-              <div className="flex items-center justify-center text-sm text-gray-400">
-                <Lock size={14} className="mr-2" />
-                <span>Your information is secure and encrypted</span>
+              <div className="space-y-4">
+                <button 
+                  onClick={() => onSelectRole('manufacturer')}
+                  className="w-full p-6 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:bg-gray-700 transition-all duration-300 group"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-900/30 flex items-center justify-center border border-blue-500/30 group-hover:bg-blue-900/50">
+                      <Package size={24} className="text-blue-400" />
+                    </div>
+                    <div className="text-left">
+                      <h4 className="text-white font-semibold">Manufacturer</h4>
+                      <p className="text-gray-400 text-sm">Register and secure your products</p>
+                    </div>
+                  </div>
+                </button>
+                <button 
+                  onClick={() => onSelectRole('buyer')}
+                  className="w-full p-6 bg-gray-800 border border-gray-700 rounded-lg hover:border-green-500 hover:bg-gray-700 transition-all duration-300 group"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 rounded-full bg-green-900/30 flex items-center justify-center border border-green-500/30 group-hover:bg-green-900/50">
+                      <Search size={24} className="text-green-400" />
+                    </div>
+                    <div className="text-left">
+                      <h4 className="text-white font-semibold">Buyer</h4>
+                      <p className="text-gray-400 text-sm">Scan and verify product authenticity</p>
+                    </div>
+                  </div>
+                </button>
               </div>
             </div>
             {/* Decorative gradient border */}

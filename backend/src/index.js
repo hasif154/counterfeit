@@ -6,11 +6,12 @@ import authRoutes from './routes/auth.js';
 import batchRoutes from './routes/batch.js';
 import printRoutes from './routes/print.js';
 import verifyRoutes from './routes/verify.js';
+import productsRoutes from './routes/products-nodatabase.js';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 // Rate limiting
 const limiter = rateLimit({
@@ -26,6 +27,7 @@ app.use(limiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/batch', batchRoutes);
 app.use('/api/print', printRoutes);
+app.use('/api/products', productsRoutes);
 app.use('/api', verifyRoutes);
 
 app.get('/health', (req, res) => {

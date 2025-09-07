@@ -111,8 +111,11 @@ export function HeroSection({
         delay: 0.2
       }} className="max-w-3xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-300 to-cyan-200">
-            Real Products. Real Proof.
+            Real Products.
           </h1>
+           <h2 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-300 to-cyan-200">
+            Real Proof.
+          </h2>
           <motion.p initial={{
           opacity: 0
         }} animate={{
